@@ -1,0 +1,79 @@
+<ion-content [fullscreen]="true" class="content ion-padding">
+  <div class="login">
+    <form class="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
+      <div class="logo">
+        <ion-img src="assets/logo.svg" alt="Logo"></ion-img>
+      </div>
+      <div class="inputs">
+        <div class="input-field">
+          <ion-input
+            formControlName="username"
+            placeholder="Username"
+            shape="round"
+            fill="outline"
+          ></ion-input>
+        </div>
+        <div class="input-field">
+          <ion-input
+            #password_field
+            formControlName="password"
+            name="Password"
+            placeholder="Password"
+            type="password"
+            shape="round"
+            fill="outline"
+          >
+            <ion-button
+              name="Toggle Password"
+              class="toggle-password"
+              fill="clear"
+              slot="end"
+              aria-label="Show/hide password"
+              (click)="this.togglePassword()"
+            >
+              <ion-icon
+                slot="icon-only"
+                name="eye"
+                aria-hidden="true"
+                *ngIf="!this.showPassword"
+              ></ion-icon>
+              <ion-icon
+                slot="icon-only"
+                name="eye-off"
+                aria-hidden="true"
+                *ngIf="this.showPassword"
+              ></ion-icon>
+            </ion-button>
+          </ion-input>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <div class="button">
+          <ion-button
+            name="Submit"
+            type="submit"
+            color="light"
+            type="submit"
+            expand="block"
+            shape="round"
+            >Login</ion-button
+          >
+        </div>
+        <div class="button">
+          <ion-button fill="clear" color="dark" expand="block" shape="round"
+            >Create account</ion-button
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <div class="forgot-password">
+    <ion-button fill="clear" color="dark" expand="block" shape="round"
+      >Forgot password?</ion-button
+    >
+  </div>
+</ion-footer>
