@@ -14,11 +14,13 @@ describe('FirebaseService', () => {
       initializeApp: null,
       getAuth: { onAuthStateChanged: (obs: Observer<User | null>) => obs.next({} as any) },
       signInWithEmailAndPassword: Promise.resolve(),
+      signOut: Promise.resolve(),
     });
     TestBed.configureTestingModule({
       providers: [{ provide: FirebaseWrapper, useValue: firebaseSpy }],
     });
     service = TestBed.inject(FirebaseService);
+    firebaseSpy = TestBed.inject(FirebaseWrapper) as jasmine.SpyObj<FirebaseWrapper>;
   });
 
   it('should be created', () => {
@@ -34,10 +36,16 @@ describe('FirebaseService', () => {
     expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
   });
   
-  it('should call signInWithEmailAndPassword on signInWithEmailAndPassword', async () => {
-    await service.signInWithEmailAndPassword('fede@test.com', 'password');
+  it('should call signInWithEmailAndPassword on login', async () => {
+    await service.login('fede@test.com', 'password');
     expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
     expect(firebaseSpy.signInWithEmailAndPassword).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should call singOut on logout', async () => {
+    await service.logout();
+    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
+    expect(firebaseSpy.signOut).toHaveBeenCalledTimes(1);
   });
   
   it('should create Observable from onAuthStateChanged on onAuthStateChanged', (done) => {

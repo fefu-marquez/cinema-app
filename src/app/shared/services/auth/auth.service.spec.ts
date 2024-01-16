@@ -12,7 +12,8 @@ describe('AuthService', () => {
   beforeEach(() => {
     fakeUser = new Subject();
     firebaseSpy = jasmine.createSpyObj('FirebaseService', {
-      signInWithEmailAndPassword: Promise.resolve(),
+      login: Promise.resolve(),
+      logout: Promise.resolve(),
       onAuthStateChanged: fakeUser,
     });
 
@@ -34,10 +35,16 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call signInWithEmailAndPassword on login', async () => {
+  it('should call login on login', async () => {
     fakeUser.next({} as any);
     await service.login({ username: 'fede@test.com', password: 'password' });
-    expect(firebaseSpy.signInWithEmailAndPassword).toHaveBeenCalledTimes(1);
+    expect(firebaseSpy.login).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call logout on logout', async () => {
+    fakeUser.next({} as any);
+    await service.logout();
+    expect(firebaseSpy.logout).toHaveBeenCalledTimes(1);
   });
 
   it('should return true if user logged in in isLoggedIn', (done) => {

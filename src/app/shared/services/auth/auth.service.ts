@@ -19,7 +19,11 @@ export class AuthService {
   }
 
   login(data: LoginData): Promise<UserCredential> {
-    return this.firebase.signInWithEmailAndPassword(data.username, data.password);
+    return this.firebase.login(data.username, data.password);
+  }
+
+  logout(): Promise<void> {
+    return this.firebase.logout();
   }
 
   isLoggedIn(): Observable<boolean> {

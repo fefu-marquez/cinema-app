@@ -23,7 +23,11 @@ export class FirebaseService {
     return new Observable(obs => this.getAuth().onAuthStateChanged(obs));
   }
 
-  signInWithEmailAndPassword(email: string, password: string): Promise<UserCredential> {
+  login(email: string, password: string): Promise<UserCredential> {
     return this.firebase.signInWithEmailAndPassword(this.getAuth(), email, password);
+  }
+
+  logout(): Promise<void> {
+    return this.firebase.signOut(this.getAuth());
   }
 }
