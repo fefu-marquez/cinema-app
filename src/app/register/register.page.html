@@ -1,0 +1,70 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Create account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form class="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
+    <div class="logo">
+      <ion-img src="assets/logo.svg" alt="Logo"></ion-img>
+    </div>
+    <div class="inputs">
+      <div class="input-field">
+        <ion-input
+          formControlName="email"
+          placeholder="Username"
+          shape="round"
+          fill="outline"
+        ></ion-input>
+      </div>
+      <div class="input-field">
+        <ion-input
+          #password_field
+          formControlName="password"
+          name="Password"
+          placeholder="Password"
+          type="password"
+          shape="round"
+          fill="outline"
+        >
+          <ion-button
+            name="Toggle Password"
+            class="toggle-password"
+            fill="clear"
+            slot="end"
+            aria-label="Show/hide password"
+            (click)="this.togglePassword()"
+          >
+            <ion-icon
+              slot="icon-only"
+              name="eye"
+              aria-hidden="true"
+              *ngIf="!this.showPassword"
+            ></ion-icon>
+            <ion-icon
+              slot="icon-only"
+              name="eye-off"
+              aria-hidden="true"
+              *ngIf="this.showPassword"
+            ></ion-icon>
+          </ion-button>
+        </ion-input>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <div class="button">
+        <ion-button
+          name="Submit"
+          type="submit"
+          color="light"
+          type="submit"
+          expand="block"
+          shape="round"
+          >Login</ion-button
+        >
+      </div>
+    </div>
+  </form>
+</ion-content>

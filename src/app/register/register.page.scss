@@ -1,0 +1,25 @@
+:host {
+    .content {
+      .login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+  
+        .form {
+            .logo {
+              display: flex;
+              align-self: center;
+              justify-content: center;
+            }
+  
+            .inputs, .buttons {
+              margin-top: 32px;
+              display:grid;
+              row-gap: 8px;
+          }
+        }
+      }
+    }
+  }
+  

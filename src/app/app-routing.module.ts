@@ -18,6 +18,11 @@ const routes: Routes = [
     path: 'login',
     canActivate: [NoAuthGuard],
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'register',
+    canActivate: [NoAuthGuard],
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   }
 ];
 
