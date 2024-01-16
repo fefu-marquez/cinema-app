@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FirebaseService } from './firebase.service';
 import { FirebaseWrapper } from '../../wrappers/firebase-wrapper/firebase-wrapper';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Observer, of } from 'rxjs';
+import { User } from 'firebase/auth';
 
 describe('FirebaseService', () => {
   let service: FirebaseService;
@@ -10,7 +12,7 @@ describe('FirebaseService', () => {
   beforeEach(() => {
     firebaseSpy = jasmine.createSpyObj('FirebaseWrapper', {
       initializeApp: null,
-      getAuth: null,
+      getAuth: { onAuthStateChanged: (obs: Observer<User | null>) => obs.next({} as any) },
       signInWithEmailAndPassword: Promise.resolve(),
     });
     TestBed.configureTestingModule({
@@ -36,6 +38,14 @@ describe('FirebaseService', () => {
     await service.signInWithEmailAndPassword('fede@test.com', 'password');
     expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
     expect(firebaseSpy.signInWithEmailAndPassword).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should create Observable from onAuthStateChanged on onAuthStateChanged', (done) => {
+    service.onAuthStateChanged().subscribe((value) => {
+      expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
+      expect(value).toEqual({} as any);
+      done();
+    });
   });
 });
 
