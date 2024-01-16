@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ContentChild,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   IonInput,
@@ -54,24 +46,25 @@ export class LoginPage {
     if (this.form.valid) {
       try {
         await this.auth.login(this.form.value);
+        await this.navController.navigateRoot('/home');
       } catch (err) {
         await this.showErrorToast();
       }
-
-      await this.navController.navigateRoot('/home');
     }
   }
 
   private async showErrorToast() {
     const toast = await this.toastController.create({
-      message: 'Something went wrong!',
+      message: 'Something went wrong! Please, try again.',
       position: 'top',
       color: 'danger',
       duration: 5000,
-      buttons: [{
-        icon: 'close-circle',
-        handler: () => this.toastController.dismiss()
-      }],
+      buttons: [
+        {
+          icon: 'close-circle',
+          handler: () => this.toastController.dismiss(),
+        },
+      ],
     });
     await toast.present();
   }
