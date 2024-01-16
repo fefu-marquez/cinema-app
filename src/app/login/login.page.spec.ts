@@ -14,16 +14,11 @@ import { LoginPage } from './login.page';
 describe('LoginPage', () => {
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
-  let menuSpy: jasmine.SpyObj<MenuController>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let toastControllerSpy: jasmine.SpyObj<ToastController>;
   let navControllerSpy: jasmine.SpyObj<NavController>;
 
   beforeEach(waitForAsync(() => {
-    menuSpy = jasmine.createSpyObj('MenuController', {
-      enable: Promise.resolve(),
-    });
-
     authServiceSpy = jasmine.createSpyObj('AuthService', {
       login: Promise.resolve(),
     });
@@ -34,13 +29,13 @@ describe('LoginPage', () => {
 
     navControllerSpy = jasmine.createSpyObj('NavController', {
       navigateRoot: Promise.resolve(),
+      navigateForward: Promise.resolve(),
     });
 
     TestBed.configureTestingModule({
       declarations: [LoginPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: MenuController, useValue: menuSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: ToastController, useValue: toastControllerSpy },
         { provide: NavController, useValue: navControllerSpy },
@@ -86,6 +81,15 @@ describe('LoginPage', () => {
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
   });
 
+  it('should navigate to create account if user clicked create account', async () => {
+    fixture.debugElement
+      .query(By.css('ion-button[name="Create account"]'))
+      .nativeElement.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/register');
+  });
+
   it('should not login if form invalid', () => {
     component.ionViewDidEnter();
     fixture.debugElement
@@ -93,11 +97,6 @@ describe('LoginPage', () => {
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
     expect(authServiceSpy.login).not.toHaveBeenCalled();
-  });
-
-  it('should disable menu', () => {
-    component.ionViewWillEnter();
-    expect(menuSpy.enable).toHaveBeenCalledOnceWith(false);
   });
 
   it('should show/hide password', () => {
@@ -108,9 +107,9 @@ describe('LoginPage', () => {
     ).nativeElement;
     buttonEl.click();
     fixture.detectChanges();
-    expect(component.passwordEl.type).toEqual('text');
+    expect(component.passwordEl.type).withContext("user showed password").toEqual('text');
     buttonEl.click();
     fixture.detectChanges();
-    expect(component.passwordEl.type).toEqual('password');
+    expect(component.passwordEl.type).withContext("user hided password").toEqual('password');
   });
 });

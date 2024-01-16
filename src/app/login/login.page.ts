@@ -1,11 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import {
-  IonInput,
-  MenuController,
-  NavController,
-  ToastController,
-} from '@ionic/angular';
+import { IonInput, NavController, ToastController } from '@ionic/angular';
 import { AuthService } from '../shared/services/auth/auth.service';
 
 @Component({
@@ -22,7 +17,6 @@ export class LoginPage {
   });
 
   constructor(
-    private menuController: MenuController,
     private auth: AuthService,
     private formBuilder: FormBuilder,
     private navController: NavController,
@@ -31,10 +25,6 @@ export class LoginPage {
 
   ionViewDidEnter(): void {
     this.showPassword = this.passwordEl.type == 'text';
-  }
-
-  ionViewWillEnter() {
-    this.menuController.enable(false);
   }
 
   togglePassword() {
@@ -67,5 +57,9 @@ export class LoginPage {
       ],
     });
     await toast.present();
+  }
+
+  goToRegister() {
+    this.navController.navigateForward('/register');
   }
 }
