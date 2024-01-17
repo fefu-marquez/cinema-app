@@ -6,13 +6,8 @@ import { NoAuthGuard } from './shared/guards/no-auth/no-auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'home',
     pathMatch: 'full'
-  },
-  {
-    path: 'folder/:id',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
   },
   {
     path: 'login',
@@ -23,7 +18,13 @@ const routes: Routes = [
     path: 'register',
     canActivate: [NoAuthGuard],
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'home',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   }
+
 ];
 
 @NgModule({

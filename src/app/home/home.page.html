@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Movies</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Movies</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div id="container" class="ion-padding">
+    <ion-list>
+      <ion-item *ngFor="let movie of this.movies">
+        <ion-thumbnail slot="start">
+          <img [alt]="movie.title + ' poster'" [src]="movie.posterURL" />
+        </ion-thumbnail>
+        <p>{{movie.title}}</p>
+        <p>{{movie.summary}}</p>
+        <p>{{movie.duration}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
