@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
-import { User, UserCredential } from 'firebase/auth';
-import { Observable, map } from 'rxjs';
+import { User, UserWithProfile } from '../../interfaces/user.model';
+import { Observable, from, map, of, switchMap } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
 
-interface UserData {
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-}
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  public user$: Observable<User | null>;
+  public user$: Observable<UserWithProfile | null>;
 
-  constructor(private firebase: FirebaseService) { 
-    this.user$ = this.firebase.onAuthStateChanged();
+  constructor(private firebase: FirebaseService) {
+    this.user$ = this.firebase.onAuthStateChanged().pipe(
+      switchMap(user => {
+        if (!!user) {
+          return from(this.firebase.doc<UserWithProfile>(`users/${user.uid}`));
+        } else {
+          return of(null);
+        }
+      }));
   }
 
-  login(data: UserData): Promise<UserCredential> {
-    return this.firebase.login(data.email, data.password);
+  async login(data: User): Promise<void> {
+    await this.firebase.login(data.email, data.password);
   }
 
   logout(): Promise<void> {
@@ -32,7 +32,7 @@ export class AuthService {
     return this.user$.pipe(map((user) => !!user));
   }
 
-  createUser(data: UserData): Promise<UserCredential> {
-    return this.firebase.createUser(data.email, data.password);
+  async createUser(data: UserWithProfile): Promise<void> {
+    await this.firebase.createUser(data.email, data.password, data.firstName, data.lastName);
   }
 }

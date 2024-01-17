@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { FirebaseService } from '../firebase/firebase.service';
-import { BehaviorSubject, Subject, of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { User } from 'firebase/auth';
 
 describe('AuthService', () => {
@@ -15,6 +15,7 @@ describe('AuthService', () => {
       login: Promise.resolve(),
       logout: Promise.resolve(),
       onAuthStateChanged: fakeUser,
+      doc: Promise.resolve({ firstName: 'test' }),
     });
 
     TestBed.configureTestingModule({
@@ -62,5 +63,13 @@ describe('AuthService', () => {
       done();
     });
     fakeUser.next(null);
+  });
+
+  it('should get user profile on service creation', (done) => {
+    service.user$.subscribe((user) => {
+      expect(user?.firstName).toEqual('test');
+      done();
+    });
+    fakeUser.next({} as any);
   });
 });
