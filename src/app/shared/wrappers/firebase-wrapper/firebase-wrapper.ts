@@ -1,28 +1,102 @@
-import { Injectable } from '@angular/core';
 import { FirebaseApp, FirebaseOptions, initializeApp } from 'firebase/app';
-import { Auth, UserCredential, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  Auth,
+  UserCredential,
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
+import {
+  CollectionReference,
+  DocumentReference,
+  DocumentSnapshot,
+  Firestore,
+  Query,
+  QueryCompositeFilterConstraint,
+  QueryNonFilterConstraint,
+  QuerySnapshot,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  setDoc,
+} from 'firebase/firestore';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class FirebaseWrapper {
-  initializeApp(options: FirebaseOptions, name?: string | undefined): FirebaseApp {
+export abstract class FirebaseWrapper {
+  static initializeApp(
+    options: FirebaseOptions,
+    name?: string | undefined
+  ): FirebaseApp {
     return initializeApp(options, name);
   }
 
-  getAuth(): Auth {
+  // Firebase auth methods
+  static getAuth(): Auth {
     return getAuth();
   }
 
-  signInWithEmailAndPassword(auth: Auth, email: string, password: string): Promise<UserCredential> {
+  static signInWithEmailAndPassword(
+    auth: Auth,
+    email: string,
+    password: string
+  ): Promise<UserCredential> {
     return signInWithEmailAndPassword(auth, email, password);
-  } 
+  }
 
-  signOut(auth: Auth): Promise<void> {
+  static signOut(auth: Auth): Promise<void> {
     return signOut(auth);
   }
 
-  createUserWithEmailAndPassword(auth: Auth, email: string, password: string): Promise<UserCredential> {
+  static createUserWithEmailAndPassword(
+    auth: Auth,
+    email: string,
+    password: string
+  ): Promise<UserCredential> {
     return createUserWithEmailAndPassword(auth, email, password);
+  }
+
+  // Firestore methods
+  static getFirestore(app: FirebaseApp): Firestore {
+    return getFirestore(app);
+  }
+
+  static doc(
+    firestore: Firestore,
+    path: string,
+    ...pathSegments: string[]
+  ): DocumentReference {
+    return doc(firestore, path, ...pathSegments);
+  }
+
+  static getDoc(
+    documentReference: DocumentReference
+  ): Promise<DocumentSnapshot> {
+    return getDoc(documentReference);
+  }
+
+  static getDocs(query: Query): Promise<QuerySnapshot> {
+    return getDocs(query);
+  }
+
+  static collection(firestore: Firestore, path: string): CollectionReference {
+    return collection(firestore, path);
+  }
+
+  static query(
+    baseQuery: Query,
+    filter: QueryCompositeFilterConstraint,
+    ...constratints: QueryNonFilterConstraint[]
+  ): Query {
+    return query(baseQuery, filter, ...constratints);
+  }
+
+  static setDoc(
+    documentReference: DocumentReference,
+    data: unknown
+  ): Promise<void> {
+    return setDoc(documentReference, data);
   }
 }

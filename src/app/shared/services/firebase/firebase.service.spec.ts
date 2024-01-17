@@ -2,26 +2,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FirebaseService } from './firebase.service';
 import { FirebaseWrapper } from '../../wrappers/firebase-wrapper/firebase-wrapper';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
-import { Observer, of } from 'rxjs';
+import { Observer } from 'rxjs';
 import { User } from 'firebase/auth';
-
+import { FirebaseWrapperTestHelper } from '../../wrappers/firebase-wrapper/firebase-wrapper.spec';
+interface Test {
+  test: string;
+}
 describe('FirebaseService', () => {
   let service: FirebaseService;
-  let firebaseSpy: jasmine.SpyObj<FirebaseWrapper>;
+  let firebaseWrapperMock: any;
 
   beforeEach(() => {
-    firebaseSpy = jasmine.createSpyObj('FirebaseWrapper', {
-      initializeApp: null,
-      getAuth: { onAuthStateChanged: (obs: Observer<User | null>) => obs.next({} as any) },
-      signInWithEmailAndPassword: Promise.resolve(),
-      createUserWithEmailAndPassword: Promise.resolve(),
-      signOut: Promise.resolve(),
-    });
-    TestBed.configureTestingModule({
-      providers: [{ provide: FirebaseWrapper, useValue: firebaseSpy }],
-    });
+    firebaseWrapperMock = FirebaseWrapperTestHelper.createFirebaseMock();
+    TestBed.configureTestingModule({});
     service = TestBed.inject(FirebaseService);
-    firebaseSpy = TestBed.inject(FirebaseWrapper) as jasmine.SpyObj<FirebaseWrapper>;
   });
 
   it('should be created', () => {
@@ -29,33 +23,67 @@ describe('FirebaseService', () => {
   });
 
   it('should initialize firebase on creation', () => {
-    expect(firebaseSpy.initializeApp).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.initializeApp).toHaveBeenCalledTimes(1);
   });
-  
+
   it('should call signInWithEmailAndPassword on login', async () => {
     await service.login('fede@test.com', 'password');
-    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
-    expect(firebaseSpy.signInWithEmailAndPassword).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getAuth).toHaveBeenCalledTimes(1);
+    expect(
+      firebaseWrapperMock.signInWithEmailAndPassword
+    ).toHaveBeenCalledTimes(1);
   });
-  
+
   it('should call singOut on logout', async () => {
     await service.logout();
-    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
-    expect(firebaseSpy.signOut).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getAuth).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.signOut).toHaveBeenCalledTimes(1);
   });
-  
+
   it('should call createUserWithEmailAndPassword on createUser', async () => {
-    await service.createUser('fede@test.com', 'password');
-    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
-    expect(firebaseSpy.createUserWithEmailAndPassword).toHaveBeenCalledTimes(1);
+    await service.createUser('fede@test.com', 'password', 'Test', 'Test');
+    expect(firebaseWrapperMock.getAuth).toHaveBeenCalledTimes(1);
+    expect(
+      firebaseWrapperMock.createUserWithEmailAndPassword
+    ).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
   });
-  
+
   it('should create Observable from onAuthStateChanged on onAuthStateChanged', (done) => {
     service.onAuthStateChanged().subscribe((value) => {
-      expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
+      expect(firebaseWrapperMock.getAuth).toHaveBeenCalledTimes(1);
       expect(value).toEqual({} as any);
       done();
     });
+  });
+
+  it('should get document converted to type in doc', async () => {
+    const response: Test = await service.doc<Test>('test');
+    expect(firebaseWrapperMock.doc).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getDoc).toHaveBeenCalledTimes(1);
+    expect(response).toEqual({ test: 'test' });
+  });
+
+  it('should get all documents on collection', async () => {
+    const respones: Test[] = await service.collection('test');
+    expect(firebaseWrapperMock.collection).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getDocs).toHaveBeenCalledTimes(1);
+    expect(respones).toContain({ test: 'test' });
+  });
+
+  it('should create on updateOrCreate', async () => {
+    await service.updateOrCreate('test', {});
+    expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
+  });
+
+  it('should create with customId on updateOrCreate', async () => {
+    await service.updateOrCreate('test', {}, 'someId');
+    expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call query or query', async () => {
+    const respones: Test[] = await service.query({} as any, {} as any);
+    expect(respones).toContain({ test: 'test' });
   });
 });
 
@@ -68,18 +96,23 @@ class TestComponent {
 
 describe('FirebaseServiceInjected', () => {
   let fixture: ComponentFixture<TestComponent>;
-  let firebaseSpy: jasmine.SpyObj<FirebaseWrapper>;
+  let firebaseWrapperMock: any;
 
   beforeEach(() => {
-    firebaseSpy = jasmine.createSpyObj('FirebaseWrapper', {
-      initializeApp: null,
-    });
+    firebaseWrapperMock = {
+      initializeApp: spyOn(FirebaseWrapper, 'initializeApp').and.returnValue(
+        null as any
+      ),
+      getAuth: spyOn(FirebaseWrapper, 'getAuth').and.returnValue({
+        onAuthStateChanged: (obs: Observer<User | null>) => obs.next({} as any),
+      } as any),
+      getFirestore: spyOn(FirebaseWrapper, 'getFirestore').and.returnValue(
+        null as any
+      ),
+    };
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      providers: [
-        { provide: FirebaseWrapper, useValue: firebaseSpy },
-        FirebaseService,
-      ],
+      providers: [FirebaseService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
@@ -87,6 +120,6 @@ describe('FirebaseServiceInjected', () => {
   });
 
   it('should initialize firebase when service injected', () => {
-    expect(firebaseSpy.initializeApp).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.initializeApp).toHaveBeenCalledTimes(1);
   });
 });
