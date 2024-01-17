@@ -3,9 +3,11 @@ import { User, UserCredential } from 'firebase/auth';
 import { Observable, map } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
 
-class LoginData {
-  username: string;
+interface UserData {
+  email: string;
   password: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 @Injectable({
@@ -18,8 +20,8 @@ export class AuthService {
     this.user$ = this.firebase.onAuthStateChanged();
   }
 
-  login(data: LoginData): Promise<UserCredential> {
-    return this.firebase.login(data.username, data.password);
+  login(data: UserData): Promise<UserCredential> {
+    return this.firebase.login(data.email, data.password);
   }
 
   logout(): Promise<void> {
@@ -28,5 +30,9 @@ export class AuthService {
 
   isLoggedIn(): Observable<boolean> {
     return this.user$.pipe(map((user) => !!user));
+  }
+
+  createUser(data: UserData): Promise<UserCredential> {
+    return this.firebase.createUser(data.email, data.password);
   }
 }

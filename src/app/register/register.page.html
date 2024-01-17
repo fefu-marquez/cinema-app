@@ -4,67 +4,102 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <form class="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
-    <div class="logo">
-      <ion-img src="assets/logo.svg" alt="Logo"></ion-img>
+<ion-content [fullscreen]="true" class="content ion-padding">
+  <div class="login">
+    <div class="text">
+      <ion-text color="medium">
+        <h2>You'll soon be able to rate all your favourite movies!</h2>
+      </ion-text>
+      
+      <ion-text color="medium">
+        <p>You just need to fill the following data.</p>
+      </ion-text>
     </div>
-    <div class="inputs">
-      <div class="input-field">
-        <ion-input
-          formControlName="email"
-          placeholder="Username"
-          shape="round"
-          fill="outline"
-        ></ion-input>
-      </div>
-      <div class="input-field">
-        <ion-input
-          #password_field
-          formControlName="password"
-          name="Password"
-          placeholder="Password"
-          type="password"
-          shape="round"
-          fill="outline"
-        >
-          <ion-button
-            name="Toggle Password"
-            class="toggle-password"
-            fill="clear"
-            slot="end"
-            aria-label="Show/hide password"
-            (click)="this.togglePassword()"
+    <form class="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
+      <div class="inputs">
+        <div class="input-field">
+          <ion-input
+            formControlName="firstName"
+            placeholder="First name"
+            shape="round"
+            fill="outline"
+          ></ion-input>
+        </div>
+        <div class="input-field">
+          <ion-input
+            formControlName="lastName"
+            placeholder="Last name"
+            shape="round"
+            fill="outline"
+          ></ion-input>
+        </div>
+        <div class="input-field">
+          <ion-input
+            formControlName="email"
+            placeholder="Email"
+            shape="round"
+            fill="outline"
+          ></ion-input>
+        </div>
+        <!-- TODO: Add error message/highlight inputs when passwords do not match -->
+        <div class="input-field">
+          <ion-input
+            #password_field
+            formControlName="password"
+            name="Password"
+            placeholder="Password"
+            type="password"
+            shape="round"
+            fill="outline"
           >
-            <ion-icon
-              slot="icon-only"
-              name="eye"
-              aria-hidden="true"
-              *ngIf="!this.showPassword"
-            ></ion-icon>
-            <ion-icon
-              slot="icon-only"
-              name="eye-off"
-              aria-hidden="true"
-              *ngIf="this.showPassword"
-            ></ion-icon>
-          </ion-button>
-        </ion-input>
+            <ion-button
+              name="Toggle Password"
+              class="toggle-password"
+              fill="clear"
+              slot="end"
+              aria-label="Show/hide password"
+              (click)="this.togglePassword()"
+            >
+              <ion-icon
+                slot="icon-only"
+                name="eye"
+                aria-hidden="true"
+                *ngIf="!this.showPassword"
+              ></ion-icon>
+              <ion-icon
+                slot="icon-only"
+                name="eye-off"
+                aria-hidden="true"
+                *ngIf="this.showPassword"
+              ></ion-icon>
+            </ion-button>
+          </ion-input>
+        </div>
+        <div class="input-field">
+          <ion-input
+            #repeat_password_field
+            formControlName="repeatPassword"
+            placeholder="Repeat your password"
+            type="password"
+            shape="round"
+            fill="outline"
+            ></ion-input>
+        </div>
       </div>
-    </div>
 
-    <div class="buttons">
-      <div class="button">
-        <ion-button
-          name="Submit"
-          type="submit"
-          color="light"
-          type="submit"
-          expand="block"
-          shape="round"
-          >Login</ion-button
-        >
+      <div class="buttons">
+        <div class="button">
+          <ion-button
+            name="Submit"
+            type="submit"
+            color="light"
+            type="submit"
+            expand="block"
+            shape="round"
+            >Create account</ion-button
+          >
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </ion-content>

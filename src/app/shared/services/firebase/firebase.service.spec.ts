@@ -14,6 +14,7 @@ describe('FirebaseService', () => {
       initializeApp: null,
       getAuth: { onAuthStateChanged: (obs: Observer<User | null>) => obs.next({} as any) },
       signInWithEmailAndPassword: Promise.resolve(),
+      createUserWithEmailAndPassword: Promise.resolve(),
       signOut: Promise.resolve(),
     });
     TestBed.configureTestingModule({
@@ -30,11 +31,6 @@ describe('FirebaseService', () => {
   it('should initialize firebase on creation', () => {
     expect(firebaseSpy.initializeApp).toHaveBeenCalledTimes(1);
   });
-
-  it('should call getAuth on getAuth', () => {
-    service.getAuth();
-    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
-  });
   
   it('should call signInWithEmailAndPassword on login', async () => {
     await service.login('fede@test.com', 'password');
@@ -46,6 +42,12 @@ describe('FirebaseService', () => {
     await service.logout();
     expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
     expect(firebaseSpy.signOut).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should call createUserWithEmailAndPassword on createUser', async () => {
+    await service.createUser('fede@test.com', 'password');
+    expect(firebaseSpy.getAuth).toHaveBeenCalledTimes(1);
+    expect(firebaseSpy.createUserWithEmailAndPassword).toHaveBeenCalledTimes(1);
   });
   
   it('should create Observable from onAuthStateChanged on onAuthStateChanged', (done) => {

@@ -15,7 +15,7 @@ export class FirebaseService {
     this.firebase.initializeApp(environment.firebase);
   }
 
-  getAuth(): Auth {
+  private getAuth(): Auth {
     return this.firebase.getAuth();
   }
 
@@ -29,5 +29,9 @@ export class FirebaseService {
 
   logout(): Promise<void> {
     return this.firebase.signOut(this.getAuth());
+  }
+
+  createUser(email: string, password: string): Promise<UserCredential> {
+    return this.firebase.createUserWithEmailAndPassword(this.getAuth(), email, password);
   }
 }

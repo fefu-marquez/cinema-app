@@ -5,14 +5,10 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-  
+
+        flex-direction: column;
+        text-align: center;
         .form {
-            .logo {
-              display: flex;
-              align-self: center;
-              justify-content: center;
-            }
-  
             .inputs, .buttons {
               margin-top: 32px;
               display:grid;

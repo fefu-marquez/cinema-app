@@ -12,7 +12,7 @@ export class LoginPage {
   @ViewChild('password_field') passwordEl: IonInput;
   showPassword: boolean;
   form: UntypedFormGroup = this.formBuilder.group({
-    username: ['', [Validators.required]],
+    email: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
 
@@ -40,6 +40,8 @@ export class LoginPage {
       } catch (err) {
         await this.showErrorToast();
       }
+    } else {
+      this.form.markAllAsTouched();
     }
   }
 

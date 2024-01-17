@@ -37,7 +37,7 @@ describe('AuthService', () => {
 
   it('should call login on login', async () => {
     fakeUser.next({} as any);
-    await service.login({ username: 'fede@test.com', password: 'password' });
+    await service.login({ email: 'fede@test.com', password: 'password' });
     expect(firebaseSpy.login).toHaveBeenCalledTimes(1);
   });
 

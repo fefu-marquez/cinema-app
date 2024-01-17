@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import {
   IonicModule,
-  MenuController,
   NavController,
   ToastController,
 } from '@ionic/angular';
@@ -54,7 +53,7 @@ describe('LoginPage', () => {
 
   it('should login', async () => {
     component.ionViewDidEnter();
-    const values = { username: 'fede@mail.com', password: 'testPassword' };
+    const values = { email: 'fede@mail.com', password: 'testPassword' };
     component.form.patchValue(values);
     fixture.debugElement
       .query(By.css('form'))
@@ -66,10 +65,10 @@ describe('LoginPage', () => {
   });
 
   it('should show toast if login failed', async () => {
-    authServiceSpy.login.and.returnValue(Promise.reject('Invalid email'));
+    authServiceSpy.login.and.rejectWith('Invalid email');
     fixture.detectChanges();
     component.ionViewDidEnter();
-    const values = { username: 'fede@mail.com', password: 'testPassword' };
+    const values = { email: 'fede@mail.com', password: 'testPassword' };
     component.form.patchValue(values);
     fixture.debugElement
       .query(By.css('form'))
@@ -111,5 +110,14 @@ describe('LoginPage', () => {
     buttonEl.click();
     fixture.detectChanges();
     expect(component.passwordEl.type).withContext("user hided password").toEqual('password');
+  });
+
+  it('should highlight errors in form if invalid', () => {
+    const spy = spyOn(component.form, 'markAllAsTouched').and.callThrough();
+    fixture.debugElement
+      .query(By.css('form'))
+      .triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });

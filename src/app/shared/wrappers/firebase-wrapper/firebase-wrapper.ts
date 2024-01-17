@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp, FirebaseOptions, initializeApp } from 'firebase/app';
-import { Auth, UserCredential, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { Auth, UserCredential, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +20,9 @@ export class FirebaseWrapper {
 
   signOut(auth: Auth): Promise<void> {
     return signOut(auth);
+  }
+
+  createUserWithEmailAndPassword(auth: Auth, email: string, password: string): Promise<UserCredential> {
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 }
