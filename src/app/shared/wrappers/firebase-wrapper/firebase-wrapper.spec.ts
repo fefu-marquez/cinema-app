@@ -7,6 +7,7 @@ const fakeAuth = {
 };
 
 const fakeDoc = {
+  id: 'id',
   data: () => {
     return { test: 'test' };
   },
@@ -25,6 +26,7 @@ export const FIREBASE_WRAPPER_RETURN_VALUES = {
   collection: Promise.resolve([fakeDoc]),
   query: Promise.resolve([fakeDoc]),
   setDoc: Promise.resolve(),
+  deleteDoc: Promise.resolve(),
 };
 
 export abstract class FirebaseWrapperTestHelper {

@@ -7,13 +7,14 @@ import { FirebaseService } from '../firebase/firebase.service';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly firebaseCollection = 'users';
   public user$: Observable<UserWithProfile | null>;
 
   constructor(private firebase: FirebaseService) {
     this.user$ = this.firebase.onAuthStateChanged().pipe(
       switchMap(user => {
         if (!!user) {
-          return from(this.firebase.doc<UserWithProfile>(`users/${user.uid}`));
+          return from(this.firebase.doc<UserWithProfile>(this.firebaseCollection, user.uid));
         } else {
           return of(null);
         }

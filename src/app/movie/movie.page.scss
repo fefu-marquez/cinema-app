@@ -1,0 +1,40 @@
+:host {
+  .content {
+    padding: 32px;
+
+    .title {
+      margin-bottom: 16px;
+
+      h1 {
+        margin-top: 0px;
+      }
+    }
+
+    .poster {
+      margin-bottom: 16px;
+
+      img {
+        height: 256px;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .rate {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 16px;
+      align-items: center;
+
+      .duration {
+        margin-left: auto;
+      }
+    }
+
+    .summary {
+      text-align: center;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+}

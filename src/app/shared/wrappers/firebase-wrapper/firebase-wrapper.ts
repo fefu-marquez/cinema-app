@@ -17,6 +17,7 @@ import {
   QueryNonFilterConstraint,
   QuerySnapshot,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -98,5 +99,9 @@ export abstract class FirebaseWrapper {
     data: unknown
   ): Promise<void> {
     return setDoc(documentReference, data);
+  }
+
+  static deleteDoc(documentReference: DocumentReference): Promise<void> {
+    return deleteDoc(documentReference);
   }
 }

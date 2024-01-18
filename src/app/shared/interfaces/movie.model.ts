@@ -1,4 +1,5 @@
 export interface Movie {
+    id: string;
     duration: number;
     mpaRating: string;
     summary: string;
