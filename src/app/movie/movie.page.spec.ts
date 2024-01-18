@@ -6,6 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MovieService } from '../shared/services/movie/movie.service';
 import { Movie } from '../shared/interfaces/movie.model';
+import { By } from '@angular/platform-browser';
+import { FormatDurationPipe } from '../shared/pipes/format-duration/format-duration.pipe';
 
 describe('MoviePage', () => {
   let component: MoviePage;
@@ -34,7 +36,7 @@ describe('MoviePage', () => {
       getMovie: Promise.resolve(fakeMovie),
     });
     TestBed.configureTestingModule({
-      declarations: [MoviePage],
+      declarations: [MoviePage, FormatDurationPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
@@ -58,10 +60,20 @@ describe('MoviePage', () => {
     expect(movieServiceSpy.getMovie).toHaveBeenCalledOnceWith('id');
   }));
 
-  it('should go to home if no id', fakeAsync(() => {
+  it('should show movie data', fakeAsync(() => {
     component.ionViewWillEnter();
     tick();
-    expect(component.movie).toEqual(fakeMovie);
-    expect(movieServiceSpy.getMovie).toHaveBeenCalledOnceWith('id');
+    fixture.detectChanges();
+    const title = fixture.debugElement.query(By.css('h1')).nativeElement.textContent;
+    const img = fixture.debugElement.query(By.css('img')).attributes['src'];
+    const imgAlt = fixture.debugElement.query(By.css('img')).attributes['alt'];
+    const duration = fixture.debugElement.query(By.css('.duration>ion-text')).nativeElement.textContent;
+    const summary = fixture.debugElement.query(By.css('.summary>ion-text')).nativeElement.textContent;
+
+    expect(title).toEqual(fakeMovie.title);
+    expect(img).toEqual(fakeMovie.posterURL);
+    expect(imgAlt).toEqual('test poster');
+    expect(duration).toEqual('3 hrs 12 min');
+    expect(summary).toEqual(fakeMovie.summary);
   }));
 });

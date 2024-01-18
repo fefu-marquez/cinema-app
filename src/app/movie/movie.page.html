@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button default-href="/home"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -10,9 +10,29 @@
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
+        <ion-back-button default-href="/home"></ion-back-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <div id="container"></div>
+  <div id="container" class="content" *ngIf="!!this.movie">
+    <div class="title">
+      <ion-text>
+        <h1>{{ this.movie.title }}</h1>
+      </ion-text>
+    </div>
+    <div class="poster">
+      <img [src]="this.movie.posterURL" [alt]="this.movie.title + ' poster'" />
+    </div>
+    <div class="rate">
+      <div class="rate-component">
+        <app-rate [rate]="this.movie.rate"></app-rate>
+      </div>
+      <div class="duration">
+        <ion-text>{{ this.movie.duration | formatDuration }}</ion-text>
+      </div>
+    </div>
+    <div class="summary">
+      <ion-text>{{ this.movie.summary }}</ion-text>
+    </div>
+  </div>
 </ion-content>
