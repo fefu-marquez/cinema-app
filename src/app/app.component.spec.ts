@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -55,14 +55,14 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should logout when user clicks logout', async () => {
+  it('should logout when user clicks logout', fakeAsync(() => {
     fixture.debugElement
       .query(By.css('ion-item[name="Logout"]'))
       .nativeElement.click();
-    await fixture.whenStable();
+    tick();
     expect(authSpy.logout).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).toHaveBeenCalledTimes(1);
-  });
+  }));
 
   it('should disable menu if user is not logged in', () => {
     fixture.detectChanges();
