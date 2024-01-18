@@ -14,15 +14,45 @@
     </ion-toolbar>
   </ion-header>
   <div id="container" class="ion-padding">
-    <ion-list>
-      <ion-item *ngFor="let movie of this.movies">
-        <ion-thumbnail slot="start">
+    <ion-item color="medium" class="movie" *ngFor="let movie of this.movies">
+      <div class="movie-container">
+        <div class="poster">
           <img [alt]="movie.title + ' poster'" [src]="movie.posterURL" />
-        </ion-thumbnail>
-        <p>{{movie.title}}</p>
-        <p>{{movie.summary}}</p>
-        <p>{{movie.duration}}</p>
-      </ion-item>
-    </ion-list>
+        </div>
+        <div class="text">
+          <div>
+            <ion-text><h4>{{movie.title}}</h4></ion-text>
+          </div>
+          <div class="summary" name="Summary">
+            <ion-text
+              >{{ (movie.summary.length>summaryMaxLength)? (movie.summary |
+              slice:0:summaryMaxLength)+'... ':(movie.summary) }}</ion-text
+            >
+            <div style="margin-top: 4px">
+              <ion-text
+                color="light"
+                style="text-decoration: underline"
+                *ngIf="movie.summary.length > summaryMaxLength"
+                >See more</ion-text
+              >
+            </div>
+          </div>
+          <div class="rate">
+            <div>
+              <ion-text>Rate:</ion-text>
+            </div>
+            <div class="stars" style="font-size: 24px;">
+              <div class="zeroth-star" style="padding-left: -16px;" (click)="this.rateMovie(-1, movie, { offsetX: 16 })"></div>
+              <ion-icon
+                [name]="starName"
+                class="star"
+                *ngFor="let starName of this.starNames(!!movie.rate ? movie.rate : 0); let rate = index"
+                (click)="this.rateMovie(rate, movie, $event)"
+              ></ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-item>
   </div>
 </ion-content>
