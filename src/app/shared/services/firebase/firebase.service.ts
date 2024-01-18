@@ -5,7 +5,6 @@ import { Auth, User as FirebaseUser, UserCredential } from 'firebase/auth';
 import { Observable } from 'rxjs';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore, Query, QueryCompositeFilterConstraint, QueryNonFilterConstraint } from 'firebase/firestore';
-import { User } from '../../interfaces/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -43,11 +42,15 @@ export class FirebaseService {
     return user;
   }
 
-  async doc<T>(path: string): Promise<T> {
-    const docRef = FirebaseWrapper.doc(this.database, path);
+  async doc<T>(collectionName: string, id: string): Promise<T> {
+    const docRef = FirebaseWrapper.doc(this.database, `${collectionName}/${id}`);
     const doc = await FirebaseWrapper.getDoc(docRef);
+    const model: any = {
+      id: doc.id,
+      ...doc.data()
+    }
 
-    return doc.data() as T;
+    return model;
   }
 
   async collection<T>(collection: string): Promise<T[]> {
@@ -65,8 +68,15 @@ export class FirebaseService {
   private async resolveQuery<T>(query: Query): Promise<T[]> {
     const docs = await FirebaseWrapper.getDocs(query);
     
-    const docList: T[] = [];
-    docs.forEach(doc => docList.push(doc.data() as T));
+    const docList: any[] = [];
+    docs.forEach(doc => {
+      const model: any = {
+        id: doc.id,
+        ...doc.data()
+      }
+
+      docList.push(model);
+    });
 
     return docList;
   }

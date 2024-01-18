@@ -7,6 +7,7 @@ const fakeAuth = {
 };
 
 const fakeDoc = {
+  id: 'id',
   data: () => {
     return { test: 'test' };
   },

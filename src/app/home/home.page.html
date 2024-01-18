@@ -14,7 +14,13 @@
     </ion-toolbar>
   </ion-header>
   <div id="container" class="ion-padding">
-    <ion-item color="medium" class="movie" *ngFor="let movie of this.movies">
+    <ion-item
+      name="Movie"
+      color="medium"
+      class="movie"
+      *ngFor="let movie of this.movies"
+      (click)="this.goToMovieDetail(movie)"
+    >
       <div class="movie-container">
         <div class="poster">
           <img [alt]="movie.title + ' poster'" [src]="movie.posterURL" />
