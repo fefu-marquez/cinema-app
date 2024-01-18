@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { RegisterPage } from './register.page';
 import { AuthService } from '../shared/services/auth/auth.service';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
@@ -84,19 +84,19 @@ describe('RegisterPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create new account and login', async () => {
+  it('should create new account and login', fakeAsync(() => {
     component.ionViewDidEnter();
     component.form.patchValue(formValues.valid);
     fixture.debugElement
       .query(By.css('form'))
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(authServiceSpy.createUser).toHaveBeenCalledOnceWith(
       formValues.valid
     );
     expect(navControllerSpy.navigateRoot).toHaveBeenCalledOnceWith('/home');
-  });
+  }));
 
   it('should not create account if form empty', () => {
     component.form.patchValue(formValues.empty);
@@ -157,7 +157,7 @@ describe('RegisterPage', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('should show toast if account already exists', async () => {
+  it('should show toast if account already exists', fakeAsync(() => {
     authServiceSpy.createUser.and.rejectWith({
       message: 'email-already-in-use',
     });
@@ -168,13 +168,13 @@ describe('RegisterPage', () => {
       .query(By.css('form'))
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(authServiceSpy.createUser).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).not.toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
-  });
+  }));
 
-  it('should show toast if email is invalid (to firebase)', async () => {
+  it('should show toast if email is invalid (to firebase)', fakeAsync(() => {
     authServiceSpy.createUser.and.rejectWith({ message: 'invalid-email' });
     fixture.detectChanges();
     component.ionViewDidEnter();
@@ -183,11 +183,11 @@ describe('RegisterPage', () => {
       .query(By.css('form'))
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(authServiceSpy.createUser).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).not.toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
-  });
+  }));
 
   it('should show/hide password', () => {
     component.ionViewDidEnter();

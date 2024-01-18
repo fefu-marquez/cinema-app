@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import {
@@ -51,7 +51,7 @@ describe('LoginPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should login', async () => {
+  it('should login', fakeAsync(() => {
     component.ionViewDidEnter();
     const values = { email: 'fede@mail.com', password: 'testPassword' };
     component.form.patchValue(values);
@@ -59,12 +59,12 @@ describe('LoginPage', () => {
       .query(By.css('form'))
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(authServiceSpy.login).toHaveBeenCalledOnceWith(values);
     expect(navControllerSpy.navigateRoot).toHaveBeenCalledOnceWith('/home');
-  });
+  }));
 
-  it('should show toast if login failed', async () => {
+  it('should show toast if login failed', fakeAsync(() => {
     authServiceSpy.login.and.rejectWith('Invalid email');
     fixture.detectChanges();
     component.ionViewDidEnter();
@@ -74,20 +74,20 @@ describe('LoginPage', () => {
       .query(By.css('form'))
       .triggerEventHandler('ngSubmit', null);
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(authServiceSpy.login).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).not.toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
-  });
+  }));
 
-  it('should navigate to create account if user clicked create account', async () => {
+  it('should navigate to create account if user clicked create account', fakeAsync(() => {
     fixture.debugElement
       .query(By.css('ion-button[name="Create account"]'))
       .nativeElement.click();
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/register');
-  });
+  }));
 
   it('should not login if form invalid', () => {
     component.ionViewDidEnter();

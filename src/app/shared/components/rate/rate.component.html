@@ -1,0 +1,12 @@
+<div>
+  <ion-text>Rate:</ion-text>
+</div>
+<div class="stars" style="font-size: 24px;">
+  <div class="zeroth-star" style="padding-left: -16px;" (click)="this.onRateEvent(0)"></div>
+  <ion-icon
+    [name]="starName"
+    class="star"
+    *ngFor="let starName of this.starNames(rate); let rate = index"
+    (click)="this.onRateEvent(rate, $event)"
+  ></ion-icon>
+</div>
