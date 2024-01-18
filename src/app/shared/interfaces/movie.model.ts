@@ -4,5 +4,5 @@ export interface Movie {
     summary: string;
     title: string;
     posterURL: string;
-    rate?: number;
+    rate: number;
 }

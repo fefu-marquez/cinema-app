@@ -46,19 +46,6 @@
 
         .rate {
           margin-top: auto;
-
-          .stars {
-            display: flex;
-            flex-direction: row;
-            .star {
-              padding: 0 2px; 
-            }
-
-            .zeroth-star {
-              width: 16px;
-              margin-left: -16px;
-            }
-          }
         }
       }
     }

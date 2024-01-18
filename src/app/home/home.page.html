@@ -38,18 +38,7 @@
             </div>
           </div>
           <div class="rate">
-            <div>
-              <ion-text>Rate:</ion-text>
-            </div>
-            <div class="stars" style="font-size: 24px;">
-              <div class="zeroth-star" style="padding-left: -16px;" (click)="this.rateMovie(-1, movie, { offsetX: 16 })"></div>
-              <ion-icon
-                [name]="starName"
-                class="star"
-                *ngFor="let starName of this.starNames(!!movie.rate ? movie.rate : 0); let rate = index"
-                (click)="this.rateMovie(rate, movie, $event)"
-              ></ion-icon>
-            </div>
+            <app-rate [rate]="movie.rate"></app-rate>
           </div>
         </div>
       </div>

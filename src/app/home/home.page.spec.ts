@@ -5,7 +5,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { HomePage } from './home.page';
-import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MovieService } from '../shared/services/movie/movie.service';
 import { IonicModule } from '@ionic/angular';
 import { Movie } from '../shared/interfaces/movie.model';
@@ -22,6 +22,7 @@ describe('HomePage', () => {
       posterURL: 'url',
       mpaRating: 'R',
       duration: 3.2,
+      rate: 3,
     },
     {
       title: 'test',
@@ -29,6 +30,7 @@ describe('HomePage', () => {
       posterURL: 'url',
       mpaRating: 'R',
       duration: 3.2,
+      rate: 0,
     },
   ];
   const longMovie: Movie[] = [
@@ -39,6 +41,7 @@ describe('HomePage', () => {
       posterURL: 'url',
       mpaRating: 'R',
       duration: 3.2,
+      rate: 0,
     },
   ];
 
@@ -80,7 +83,7 @@ describe('HomePage', () => {
     expect(text).not.toContain('...');
     expect(text).not.toContain('See more');
   }));
-
+  
   it('should truncate long text on summary', fakeAsync(() => {
     component.summaryMaxLength = 30;
     movieServiceSpy.getMovies.and.resolveTo(longMovie);
@@ -93,57 +96,5 @@ describe('HomePage', () => {
     expect(text).toContain('...');
     expect(text).toContain('See more');
     expect(text.length).toBe(30 + 4 + 8);
-  }));
-
-  it('should be able to rate 3.5 stars', fakeAsync(() => {
-    component.ionViewWillEnter();
-    tick();
-    fixture.detectChanges();
-    const stars = fixture.debugElement.queryAll(By.css('.stars>ion-icon'));
-    stars[3].nativeElement.click();
-    fixture.detectChanges();
-    const newStars = fixture.debugElement.queryAll(By.css('.stars>ion-icon'));
-    expect(newStars[0].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[1].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[2].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[3].attributes['ng-reflect-name']).toEqual(
-      'star-half-outline'
-    );
-    expect(newStars[4].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(component.movies[0].rate).toBe(3.5);
-  }));
-
-  it('should be able to rate 0 stars', fakeAsync(() => {
-    component.ionViewWillEnter();
-    tick();
-    component.movies[0].rate = 3.5;
-    fixture.detectChanges();
-    fixture.debugElement
-      .queryAll(By.css('.zeroth-star'))[0]
-      .nativeElement.click();
-    fixture.detectChanges();
-    const newStars = fixture.debugElement.queryAll(By.css('.stars>ion-icon'));
-    expect(newStars[0].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(newStars[1].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(newStars[2].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(newStars[3].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(newStars[4].attributes['ng-reflect-name']).toEqual('star-outline');
-    expect(component.movies[0].rate).toBe(0);
-  }));
-
-  it('should be able to rate 5 stars', fakeAsync(() => {
-    component.ionViewWillEnter();
-    tick();
-    fixture.detectChanges();
-    const stars = fixture.debugElement.queryAll(By.css('.stars>ion-icon'));
-    stars[4].triggerEventHandler('click', { offsetX: 16 });
-    fixture.detectChanges();
-    const newStars = fixture.debugElement.queryAll(By.css('.stars>ion-icon'));
-    expect(newStars[0].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[1].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[2].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[3].attributes['ng-reflect-name']).toEqual('star');
-    expect(newStars[4].attributes['ng-reflect-name']).toEqual('star');
-    expect(component.movies[0].rate).toBe(5);
   }));
 });

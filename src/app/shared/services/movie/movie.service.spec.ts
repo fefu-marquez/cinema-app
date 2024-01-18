@@ -12,14 +12,16 @@ describe('MovieService', () => {
       summary: 'test',
       posterURL: 'url',
       mpaRating: 'R',
-      duration: 3.2
+      duration: 3.2,
+      rate: 3,
     },
     {
       title: 'test',
       summary: 'test',
       posterURL: 'url',
       mpaRating: 'R',
-      duration: 3.2
+      duration: 3.2,
+      rate: 0,
     },
   ];
 
@@ -28,9 +30,7 @@ describe('MovieService', () => {
       collection: Promise.resolve(testMovies),
     });
     TestBed.configureTestingModule({
-      providers: [
-        { provide: FirebaseService, useValue: firebaseServiceSpy }
-      ]
+      providers: [{ provide: FirebaseService, useValue: firebaseServiceSpy }],
     });
     service = TestBed.inject(MovieService);
   });
@@ -39,7 +39,7 @@ describe('MovieService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get movies on getMovies', async() => {
+  it('should get movies on getMovies', async () => {
     const movies = await service.getMovies();
     expect(movies).toContain(testMovies[0]);
     expect(movies.length).toBe(2);
