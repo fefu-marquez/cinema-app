@@ -31,6 +31,7 @@ describe('MovieService', () => {
     firebaseServiceSpy = jasmine.createSpyObj('FirebaseService', {
       collection: Promise.resolve(testMovies),
       doc: Promise.resolve(testMovies[0]),
+      delete: Promise.resolve(),
     });
     TestBed.configureTestingModule({
       providers: [{ provide: FirebaseService, useValue: firebaseServiceSpy }],
@@ -52,5 +53,10 @@ describe('MovieService', () => {
     const movie = await service.getMovie('id');
     expect(movie.title).toEqual(testMovies[0].title);
     expect(movie.id).toEqual(testMovies[0].id);
+  });
+
+  it('should delete movie on deleteMovie', async () => {
+    await service.deleteMovie('id');
+    expect(firebaseServiceSpy.delete).toHaveBeenCalledTimes(1);
   });
 });

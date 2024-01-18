@@ -16,4 +16,8 @@ export class MovieService {
   getMovie(id: string): Promise<Movie> {
     return this.firebase.doc<Movie>(this.firebaseCollection, id);
   }
+
+  deleteMovie(id: string): Promise<void> {
+    return this.firebase.delete(this.firebaseCollection, id);
+  }
 }

@@ -79,6 +79,11 @@ describe('FirebaseService', () => {
     expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
   });
 
+  it('should delete on delete', async () => {
+    await service.delete('test', 'someId');
+    expect(firebaseWrapperMock.deleteDoc).toHaveBeenCalledTimes(1);
+  });
+
   it('should call query on query', async () => {
     const respones: Test[] = await service.query({} as any, {} as any);
     expect(respones).toContain({ id: 'id', test: 'test' });

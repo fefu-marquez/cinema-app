@@ -3,6 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button default-href="/home"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end" *ngIf="!!this.movie">
+      <ion-button (click)="this.deleteMovieWarning()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,6 +16,11 @@
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-back-button default-href="/home"></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end" *ngIf="!!this.movie">
+        <ion-button name="Delete" (click)="this.deleteMovieWarning()">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
