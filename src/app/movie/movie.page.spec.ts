@@ -53,6 +53,7 @@ describe('MoviePage', () => {
     });
     navControllerSpy = jasmine.createSpyObj('NavController', {
       navigateRoot: Promise.resolve(),
+      navigateForward: Promise.resolve(),
     });
     toastControllerSpy = jasmine.createSpyObj('ToastController', {
       create: Promise.resolve({ present: () => {} }),
@@ -137,5 +138,13 @@ describe('MoviePage', () => {
     expect(movieServiceSpy.deleteMovie).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).not.toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should go to update page when user clicks edit button', fakeAsync(() => {
+    component.ionViewWillEnter();
+    tick();
+    fixture.detectChanges();
+    fixture.debugElement.query(By.css('ion-button[name="Update"]')).nativeElement.click();
+    expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/update/2');
   }));
 });

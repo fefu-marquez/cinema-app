@@ -69,14 +69,22 @@ describe('FirebaseService', () => {
     expect(respones).toContain({ id: 'id', test: 'test' });
   });
 
-  it('should create on updateOrCreate', async () => {
-    await service.updateOrCreate('test', {});
-    expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
+  it('should create on create', async () => {
+    await service.create('test', {});
+    expect(firebaseWrapperMock.addDoc).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getDoc).toHaveBeenCalledTimes(1);
   });
 
-  it('should create with customId on updateOrCreate', async () => {
-    await service.updateOrCreate('test', {}, 'someId');
+  it('should create with customId on create', async () => {
+    await service.create('test', {}, 'someId');
     expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getDoc).toHaveBeenCalledTimes(1);
+  });
+
+  it('should update on update', async () => {
+    await service.update('test', {}, 'someId');
+    expect(firebaseWrapperMock.setDoc).toHaveBeenCalledTimes(1);
+    expect(firebaseWrapperMock.getDoc).toHaveBeenCalledTimes(1);
   });
 
   it('should delete on delete', async () => {

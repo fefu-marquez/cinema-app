@@ -51,6 +51,10 @@ export class MoviePage {
     await alert.present();
   }
 
+  goToUpdateMovie() {
+    return this.navController.navigateForward(`/update/${this.movie.id}`);
+  }
+
   async deleteMovie() {
     try {
       await this.alertController.dismiss();

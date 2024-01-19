@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button default-href="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title size="large">{{ 'Create' }} movie</ion-title>
+    <ion-title size="large">{{ this.mode | titlecase }} movie</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +18,7 @@
   </ion-header>
 
   <div id="container" class="ion-padding">
-    <form class="form" [formGroup]="this.form" (ngSubmit)="this.createMovie()">
+    <form class="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
       <div class="inputs">
         <div class="form-field" lines="none">
           <ion-input
@@ -97,7 +97,7 @@
         </div>
       </div>
       <ion-button type="submit" color="light" shape="round"
-        >Create movie</ion-button
+        >{{ this.mode | titlecase }} movie</ion-button
       >
     </form>
   </div>

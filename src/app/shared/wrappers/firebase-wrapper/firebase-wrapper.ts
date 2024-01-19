@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import {
   CollectionReference,
+  DocumentData,
   DocumentReference,
   DocumentSnapshot,
   Firestore,
@@ -105,7 +106,7 @@ export abstract class FirebaseWrapper {
   static addDoc(
     collectionReference: CollectionReference,
     data: unknown
-  ): Promise<any> {
+  ): Promise<DocumentReference<unknown, DocumentData>> {
     return addDoc(collectionReference, data);
   }
 
