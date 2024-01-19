@@ -23,4 +23,8 @@ export class HomePage {
   goToMovieDetail(movie: Movie) {
     this.navController.navigateForward(`/movie/${movie.id}`);
   }
+
+  goToCreateMovie() {
+    this.navController.navigateForward('/create');
+  }
 }

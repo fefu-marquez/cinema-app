@@ -1,7 +1,9 @@
 import {
   ComponentFixture,
   TestBed,
+  discardPeriodicTasks,
   fakeAsync,
+  flush,
   tick,
   waitForAsync,
 } from '@angular/core/testing';
@@ -47,6 +49,7 @@ describe('MoviePage', () => {
     });
     alertControllerSpy = jasmine.createSpyObj('AlertController', {
       create: Promise.resolve({ present: () => Promise.resolve() }),
+      dismiss: Promise.resolve(),
     });
     navControllerSpy = jasmine.createSpyObj('NavController', {
       navigateRoot: Promise.resolve(),
@@ -111,6 +114,7 @@ describe('MoviePage', () => {
       .nativeElement.click();
     tick();
     expect(alertControllerSpy.create).toHaveBeenCalledTimes(1);
+    flush();
   }));
 
   it('should delete movie and redirect user to home on deleteMovie', fakeAsync(() => {

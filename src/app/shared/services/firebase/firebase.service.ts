@@ -56,7 +56,7 @@ export class FirebaseService {
       email,
       password
     );
-    await this.updateOrCreate('users', { firstName, lastName }, user.user.uid);
+    await this.create('users', { firstName, lastName }, user.user.uid);
     return user;
   }
 
@@ -106,20 +106,27 @@ export class FirebaseService {
     return docList;
   }
 
-  updateOrCreate<T>(
+  update<T>(
+    collection: string,
+    data: T,
+    id: string
+  ): Promise<void> {
+      const docRef = FirebaseWrapper.doc(this.database, collection, id);
+      return FirebaseWrapper.setDoc(docRef, data);
+  }
+
+  create<T>(
     collection: string,
     data: T,
     customId?: string
   ): Promise<void> {
-    let docRef;
-
     if (customId) {
-      docRef = FirebaseWrapper.doc(this.database, collection, customId);
+      const docRef = FirebaseWrapper.doc(this.database, collection, customId);
+      return FirebaseWrapper.setDoc(docRef, data);
     } else {
-      docRef = FirebaseWrapper.doc(this.database, collection);
+      const colRef = FirebaseWrapper.collection(this.database, collection)
+      return FirebaseWrapper.addDoc(colRef, data);
     }
-
-    return FirebaseWrapper.setDoc(docRef, data);
   }
 
   delete(collection: string, id: string): Promise<void> {

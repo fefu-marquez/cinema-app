@@ -20,4 +20,12 @@ export class MovieService {
   deleteMovie(id: string): Promise<void> {
     return this.firebase.delete(this.firebaseCollection, id);
   }
+
+  createMovie(movie: any): Promise<void> {
+    return this.firebase.create(this.firebaseCollection, movie);
+  }
+  
+  updateMovie(movie: any, id: string): Promise<void> {
+    return this.firebase.update(this.firebaseCollection, movie, id);
+  }
 }

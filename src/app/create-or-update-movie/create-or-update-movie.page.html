@@ -1,0 +1,104 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title size="large">{{ 'Create' }} movie</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button default-href="/home"></ion-back-button>
+      </ion-buttons>
+      <ion-title size="large">{{ 'Create' }} movie</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container" class="ion-padding">
+    <form class="form" [formGroup]="this.form" (ngSubmit)="this.createMovie()">
+      <div class="inputs">
+        <div class="form-field" lines="none">
+          <ion-input
+            formControlName="title"
+            labelPlacement="floating"
+            placeholder="My new movie"
+          >
+            <div slot="label">
+              Title <ion-text color="danger">(Required)</ion-text>
+            </div>
+          </ion-input>
+        </div>
+        <div class="form-field" lines="none">
+          <div class="rate">
+            <app-rate
+              [rate]="this.form.value.rate"
+              (rateEvent)="this.onRateChange($event)"
+            ></app-rate>
+          </div>
+        </div>
+        <div class="form-field" lines="none">
+          <ion-textarea
+            formControlName="summary"
+            labelPlacement="floating"
+            placeholder="This movie is about..."
+          >
+            <div slot="label">
+              Summary <ion-text color="danger">(Required)</ion-text>
+            </div>
+          </ion-textarea>
+        </div>
+        <div class="form-field" lines="none">
+          <ion-input
+            formControlName="posterURL"
+            labelPlacement="floating"
+            placeholder="https://photourl"
+          >
+            <div slot="label">
+              Image URL <ion-text color="danger">(Required)</ion-text>
+            </div>
+          </ion-input>
+        </div>
+        <div class="form-field" lines="none">
+          <div class="ion-padding-top">
+            <ion-label
+              >Duration
+              <ion-text color="danger">(Required)</ion-text></ion-label
+            >
+          </div>
+
+          <div class="duration">
+            <ion-input
+              formControlName="durationHours"
+              inputmode="numeric"
+              type="number"
+              step="1"
+              min="0"
+              labelPlacement="floating"
+              placeholder="0"
+            >
+              <div slot="label">Hours</div>
+            </ion-input>
+            <ion-input
+              formControlName="durationMinutes"
+              inputmode="numeric"
+              type="number"
+              step="1"
+              min="0"
+              max="59"
+              labelPlacement="floating"
+              placeholder="0"
+            >
+              <div slot="label">Minutes</div>
+            </ion-input>
+          </div>
+        </div>
+      </div>
+      <ion-button type="submit" color="light" shape="round"
+        >Create movie</ion-button
+      >
+    </form>
+  </div>
+</ion-content>

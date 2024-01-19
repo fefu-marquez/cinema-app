@@ -54,4 +54,13 @@
   .text-center {
     text-align: center;
   }
+  
+  .floating-button {
+    width: 48px;
+    height: 48px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
 }

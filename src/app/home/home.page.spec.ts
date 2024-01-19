@@ -116,4 +116,9 @@ describe('HomePage', () => {
     tick();
     expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/movie/1');
   }));
+
+  it('should go to create page when user clicks add button',  () => {
+    fixture.debugElement.query(By.css('ion-fab-button[name="Add"]')).nativeElement.click();
+    expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/create');
+  });
 });

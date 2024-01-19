@@ -1,0 +1,37 @@
+:host {
+  .form {
+    .inputs {
+      margin-top: 32px;
+      margin-bottom: 32px;
+      display: grid;
+      row-gap: 8px;
+
+      ion-item {
+        --background: transparent;
+      }
+
+      .form-field {
+        border-radius: 28px;
+        outline: 1px solid var(--ion-color-medium);
+        padding: 2px 28px;
+
+        .rate {
+          padding: 8px 0;
+        }
+      }
+
+      .duration {
+        display: flex;
+        flex-direction: row;
+
+        ion-input {
+            margin-right: 12px;
+        }
+      }
+    }
+
+    ion-button {
+      width: 100%;
+    }
+  }
+}
