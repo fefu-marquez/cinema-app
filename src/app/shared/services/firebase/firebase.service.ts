@@ -10,6 +10,7 @@ import {
   QueryCompositeFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore';
+import { Movie } from '../../interfaces/movie.model';
 
 @Injectable({
   providedIn: 'root',
@@ -56,7 +57,7 @@ export class FirebaseService {
       email,
       password
     );
-    await this.updateOrCreate('users', { firstName, lastName }, user.user.uid);
+    await this.create('users', { firstName, lastName }, user.user.uid);
     return user;
   }
 
@@ -106,20 +107,24 @@ export class FirebaseService {
     return docList;
   }
 
-  updateOrCreate<T>(
-    collection: string,
-    data: T,
-    customId?: string
-  ): Promise<void> {
-    let docRef;
+  async update<T>(collection: string, data: T, id: string): Promise<T> {
+    const docRef = FirebaseWrapper.doc(this.database, collection, id);
+    await FirebaseWrapper.setDoc(docRef, data);
+    return this.doc<T>(collection, id);
+  }
 
+  async create<T>(collection: string, data: T, customId?: string): Promise<T> {
+    let id: string;
     if (customId) {
-      docRef = FirebaseWrapper.doc(this.database, collection, customId);
+      const docRef = FirebaseWrapper.doc(this.database, collection, customId);
+      await FirebaseWrapper.setDoc(docRef, data);
+      id = customId;
     } else {
-      docRef = FirebaseWrapper.doc(this.database, collection);
+      const colRef = FirebaseWrapper.collection(this.database, collection);
+      const doc = await FirebaseWrapper.addDoc(colRef, data);
+      id = doc.id;
     }
-
-    return FirebaseWrapper.setDoc(docRef, data);
+    return this.doc<T>(collection, id);
   }
 
   delete(collection: string, id: string): Promise<void> {

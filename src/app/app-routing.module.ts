@@ -34,6 +34,14 @@ const routes: Routes = [
       import('./movie/movie.module').then((m) => m.MoviePageModule),
   },
   {
+    path: 'create',
+    loadChildren: () => import('./create-or-update-movie/create-or-update-movie.module').then( m => m.CreateOrUpdateMoviePageModule)
+  },
+  {
+    path: 'update/:id',
+    loadChildren: () => import('./create-or-update-movie/create-or-update-movie.module').then( m => m.CreateOrUpdateMoviePageModule)
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },

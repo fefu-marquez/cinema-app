@@ -1,7 +1,9 @@
 import {
   ComponentFixture,
   TestBed,
+  discardPeriodicTasks,
   fakeAsync,
+  flush,
   tick,
   waitForAsync,
 } from '@angular/core/testing';
@@ -47,9 +49,11 @@ describe('MoviePage', () => {
     });
     alertControllerSpy = jasmine.createSpyObj('AlertController', {
       create: Promise.resolve({ present: () => Promise.resolve() }),
+      dismiss: Promise.resolve(),
     });
     navControllerSpy = jasmine.createSpyObj('NavController', {
       navigateRoot: Promise.resolve(),
+      navigateForward: Promise.resolve(),
     });
     toastControllerSpy = jasmine.createSpyObj('ToastController', {
       create: Promise.resolve({ present: () => {} }),
@@ -111,6 +115,7 @@ describe('MoviePage', () => {
       .nativeElement.click();
     tick();
     expect(alertControllerSpy.create).toHaveBeenCalledTimes(1);
+    flush();
   }));
 
   it('should delete movie and redirect user to home on deleteMovie', fakeAsync(() => {
@@ -133,5 +138,13 @@ describe('MoviePage', () => {
     expect(movieServiceSpy.deleteMovie).toHaveBeenCalledTimes(1);
     expect(navControllerSpy.navigateRoot).not.toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should go to update page when user clicks edit button', fakeAsync(() => {
+    component.ionViewWillEnter();
+    tick();
+    fixture.detectChanges();
+    fixture.debugElement.query(By.css('ion-button[name="Update"]')).nativeElement.click();
+    expect(navControllerSpy.navigateForward).toHaveBeenCalledOnceWith('/update/2');
   }));
 });
