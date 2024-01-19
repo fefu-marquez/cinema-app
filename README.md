@@ -41,5 +41,7 @@ After this, you need to activate the Authentication and Firestore modules from t
 
 ![imagen](https://github.com/fefu-marquez/cinema-app/assets/17768182/696f49f9-a8f9-45be-aca0-114e3f40c198)
 
+You'll also want to activate user authentication via e-mail and password on the authentication section. 
+
 3. Run the project. You can use either `npm start` or `ionic serve`. 
 
